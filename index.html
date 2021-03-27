@@ -25,12 +25,12 @@
 
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button onclick="handleProductChange('iphone',false)" class="btn btn-default" ><i class="fas fa-minus"></i></button>
+                           <input type="text" id="iphone-count" class="form-control text-center"  value="1">
+                           <button onclick="handleProductChange('iphone',true)" class="btn btn-default" ><i class="fas fa-plus"></i></button>
                         </div>
-                        <h5>$1219</h5>
-                        <img src="images/remove.png" alt="" class="remove-item">
+                        <h5>$ <span id="iphone-total" >1200</span> </h5>
+                        <input type="image" src="images/remove.png" alt="" id="remove-iphone">
                      </div>
                   </div>
                </div>
@@ -43,13 +43,13 @@
                      </div>
                      <div class="col-md-5 center-item">
                         <div class="input-group number-spinner">
-                           <button class="btn btn-default"><i class="fas fa-minus"></i></button>
-                           <input type="text" class="form-control text-center" value="1">
-                           <button class="btn btn-default"><i class="fas fa-plus"></i></button>
+                           <button onclick="handleProductChange('case',false)" class="btn btn-default" ><i class="fas fa-minus"></i></button>
+                           <input type="text" id="case-count" class="form-control text-center"  value="1">
+                           <button onclick="handleProductChange('case',true)"  class="btn btn-default"><i class="fas fa-plus"></i></button>
 
                         </div>
-                        <h5>$59</h5>
-                        <img src="images/remove.png" alt="" class="remove-item">
+                        <h5>$ <span id="case-total">59</span></h5>
+                        <input type="image" src="images/remove.png" alt="" id="remove-case">
                      </div>
                   </div>
                </div>
@@ -64,9 +64,9 @@
                      </div>
 
                      <div class="col-md-4 status">
-                        <h5>$1,278</h5>
-                        <h5>$0</h5>
-                        <h5>$1,278</h5>
+                        <h5>$ <span id="total-product">0</span> </h5>
+                        <h5>$ <span id = "tax-amount">0</span></h5>
+                        <h5>$ <span id="grand-total">1,278</span></h5>
                      </div>
                   </div>
                </div>
@@ -77,6 +77,75 @@
          </div>
       </div>
    </section>
+
+   <script>
+  
+   function handleProductChange(product, isIncrease) {
+      const productCount = document.getElementById(product + "-count");
+      const productCountParse = parseInt(productCount.value); 
+      let productNewCount = productCountParse;
+      if (isIncrease == true) {
+         productNewCount = productCountParse + 1;
+      }
+      if(isIncrease == false && productNewCount > 0 ){
+         productNewCount = productCountParse - 1;
+      }
+      productCount.value = productNewCount;
+      let productTotal = 0;
+      if (product == 'iphone') {
+         productTotal = productNewCount *1200
+      }
+      if (product == 'case'){
+         productTotal = productNewCount * 59
+      }
+      document.getElementById(product + "-total").innerText = productTotal;
+
+      calculateTotal()
+   }
+
+      function calculateTotal(){
+
+         const phoneCount = getInputValue('iphone');
+         const caseCount = getInputValue('case');
+
+         productTotal = phoneCount * 1200 + caseCount * 59;
+         document.getElementById('total-product').innerText = productTotal;
+
+         const tax = Math.round(productTotal * 0.1);
+         document.getElementById('tax-amount').innerText = tax;
+
+         const grandTotal = productTotal + tax;
+         document.getElementById('grand-total').innerText = grandTotal;
+
+         
+
+
+      }
+
+      function getInputValue(product){
+         productInput = document.getElementById(product + '-count');
+         productCount = parseInt(productInput.value);
+         return productCount;
+
+
+      }
+
+      removeItem('iphone');
+
+      removeItem('case');
+
+      function removeItem(product){
+         const crossBtn = document.getElementById('remove-' + product)
+         crossBtn.addEventListener('click', function(){
+
+         document.getElementById(product + '-count').value = 0;
+         document.getElementById(product + '-total').innerText = 0;
+         calculateTotal()
+      })
+   }
+   
+
+   </script>
 </body>
 
 </html>
